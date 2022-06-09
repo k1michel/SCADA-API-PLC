@@ -6,15 +6,37 @@
             <title>
                 SCADA-API-PLC
             </title>
+            <script type = "text/JavaScript">
+                <!--
+                   function AutoRefresh( t ) {
+                      setTimeout("location.reload(true);", t);
+                   }
+                //-->
+             </script>
         </head>
-        <body>
+        <body onload = "JavaScript:AutoRefresh(500);document.forms[0].submit();">
             <header>
                 <h1>SCADA DE PALETIZADOR INDUSTRIAL CON COMUNICACION A SERVIDOR EXTERNO</h1>
             </header>
-           <p>Numero de pales :="POSICIONES_PALETIZADOR".N_PALES:</p> 
-           <p>Numero de piezas :="POSICIONES_PALETIZADOR".N_PIEZAS:</p> 
+            <p>Numero de pales :="POSICIONES_PALETIZADOR".N_PALES:</p> 
+            <p>Numero de piezas :="POSICIONES_PALETIZADOR".N_PIEZAS:</p> 
             <p></p>Numero de cajas :="POSICIONES_PALETIZADOR".N_CAJAS:</p> 
-
+            
+            <form action='http://192.168.0.150:8000/envios' method='POST'>
+                <?php
+                    function post_data() {
+                        $datae = array();
+                        $datae[] = array(
+                            'n_piezas' => $_POST['pieza'],
+                            'n_cajas' => $_POST['caja'],
+                            
+                        );
+                        return json_encode($datae);
+                
+                    }
+                ?>
+            </form>
+            
             <footer>by Miguel Angel Alvarez Clemente</footer>
         </body>
         
