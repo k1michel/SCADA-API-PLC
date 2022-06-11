@@ -8,18 +8,18 @@ from time import sleep
 from datetime import datetime
 from ObjectListView import ObjectListView, ColumnDefn
 from typing import Optional   
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel  
 from datetime import datetime
 from threading import Thread
 from time import sleep
 import uvicorn
 from API_gestor_datos import Conexion
+import asyncio
+import codecs
 
 class Datos(BaseModel):         
-    n_piezas: str                     
-    n_cajas: str  
-    
+    envio: bytes
 
 
 
@@ -49,14 +49,16 @@ def get_envios():
     return list_envio
 
 @api_scada.post("/envios")
-def post_envios(datos : Datos):
-    
-    dic_datos= dict(
-        n_piezas=datos.n_piezas,
-        n_cajas=datos.n_cajas,
+async def post_envios(requests: Request):
+    mensaje_bytes = await requests.body()
+    print(type(mensaje_bytes))
+    mensaje = codecs.decode(mensaje_bytes, encoding='utf-8', errors='strict')
+    dict_datos = dict(
+        envio = mensaje,
     )
-    conexion.insertar_envios(dic_datos)
-    return 'Datos recibidos en Envios OK'
+    print(dict_datos)
+    conexion.insertar_envios(dict_datos)
+    return 'Datos recibidos OK'
 @api_scada.delete("/envios")
 def delete_envios():
     conexion.eliminar_envios()
