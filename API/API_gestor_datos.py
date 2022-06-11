@@ -17,8 +17,8 @@ class Conexion:
 
     ### PEDIDO MARCHANDO ###
 
-    def insertar_envios(self,dict_datos):
-        return self.envios.insert(dict_datos)
+    def insertar_envios(self,mensaje_plc):
+        return self.envios.insert(mensaje_plc)
 
     def mostrar_envios(self):
         return [dict(datos) for datos in self.envios.all()]
