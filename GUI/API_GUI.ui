@@ -20,8 +20,8 @@
    <widget class="QLabel" name="label_n_piezas">
     <property name="geometry">
      <rect>
-      <x>1470</x>
-      <y>200</y>
+      <x>900</x>
+      <y>260</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -45,8 +45,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_n_cajas">
     <property name="geometry">
      <rect>
-      <x>1470</x>
-      <y>250</y>
+      <x>900</x>
+      <y>310</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -70,8 +70,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="in_n_piezas">
     <property name="geometry">
      <rect>
-      <x>1700</x>
-      <y>200</y>
+      <x>1130</x>
+      <y>260</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -91,8 +91,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="in_n_cajas">
     <property name="geometry">
      <rect>
-      <x>1700</x>
-      <y>250</y>
+      <x>1130</x>
+      <y>310</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -112,8 +112,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_n_pales">
     <property name="geometry">
      <rect>
-      <x>1470</x>
-      <y>300</y>
+      <x>900</x>
+      <y>360</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -137,8 +137,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="in_n_pales">
     <property name="geometry">
      <rect>
-      <x>1700</x>
-      <y>300</y>
+      <x>1130</x>
+      <y>360</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -159,7 +159,7 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-30</y>
+      <y>0</y>
       <width>1921</width>
       <height>1341</height>
      </rect>
@@ -180,18 +180,18 @@ color: rgb(255, 255, 255);</string>
    <widget class="QTableWidget" name="table">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>211</y>
+      <x>180</x>
+      <y>260</y>
       <width>701</width>
-      <height>1011</height>
+      <height>961</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="boton_refrescar">
     <property name="geometry">
      <rect>
-      <x>1510</x>
-      <y>130</y>
+      <x>1450</x>
+      <y>250</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -211,6 +211,25 @@ color: rgb(255, 255, 255);</string>
      <string>REFRESCAR</string>
     </property>
    </widget>
+   <widget class="QLabel" name="logo">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>10</y>
+      <width>721</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>logo_scada_api_plc.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>img_fondo</zorder>
    <zorder>label_n_piezas</zorder>
    <zorder>label_n_cajas</zorder>
@@ -220,6 +239,7 @@ color: rgb(255, 255, 255);</string>
    <zorder>in_n_pales</zorder>
    <zorder>table</zorder>
    <zorder>boton_refrescar</zorder>
+   <zorder>logo</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

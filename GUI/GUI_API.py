@@ -10,14 +10,26 @@ from time import sleep
 from datetime import datetime
 import subprocess
 from threading import Thread
+
+class Refrescar(QThread):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        print('Inicia el Thread')
+        Gui = gui_api_scada()
+        print('Hereda GUI')
+        Gui.visualizar_tabla()
+        print('Realizando refresco')
+
+
 class gui_api_scada(QMainWindow):
     
     def __init__(self):
         super().__init__()
         uic.loadUi("API_GUI.ui",self)
         ## LOGO ##
-        #pixmap = QPixmap('Letras_API_scada.png')
-        #self.img_letras_logo.setPixmap(pixmap)
+        pixmap = QPixmap('Logo_scada_api_plc.png')
+        self.logo.setPixmap(pixmap)
         ## FONDO ##
         pixmap = QPixmap('Fondo_API_scada.png')
         self.img_fondo.setPixmap(pixmap)
@@ -93,7 +105,8 @@ class gui_api_scada(QMainWindow):
         self.in_n_pales.setText(str(self.n_pales_total))
         
     def refresco_auto_estado(self):
-        self.visualizar_tabla()
+        self.refrescar = Refrescar()
+        self.refrescar.start()
         
 
 
