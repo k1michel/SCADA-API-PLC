@@ -14,13 +14,36 @@ class BackendThread(QObject):
     refresh = pyqtSignal(list)
     ip_api= 'http://localhost:8000/'
     list_all_envios: list
+    respuesta_server:bool
+
     def run(self):
         
         while True:
-            all_envios = requests.get(f'{self.ip_api}envios')
-            json_all_envios = all_envios.json()
-            lista_all_envios = [dict(id_item) for id_item in json_all_envios]
-            self.refresh.emit(lista_all_envios)
+            
+            try:
+                all_envios = requests.get(f'{self.ip_api}envios',timeout=4)
+                self.respuesta_server= True
+                print(f'Server {self.ip_api} ACTIVO')
+            except (requests.exceptions.ConnectTimeout,requests.exceptions.ReadTimeout):
+                self.respuesta_server=False
+                print(f'Server {self.ip_api} INACTIVO')
+                sleep(1)
+                
+        
+            if self.respuesta_server==True:
+                json_all_envios = all_envios.json()
+                list_all_envios = [dict(id_item) for id_item in json_all_envios]
+                self.refresh.emit(list_all_envios)
+            else:
+                info_server = 'server_inactivo'
+                list_all_envios.append(info_server)
+                self.refresh.emit(list_all_envios)
+                print(list_all_envios)
+                list_all_envios= []
+                print(list_all_envios)
+
+            
+            
             
             
             
@@ -53,13 +76,14 @@ class gui_api_scada(QMainWindow):
         self.table.setRowCount(50)
         self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Cajas','Pales'])
         self.table.horizontalHeader().setSectionResizeMode(80)
-        self.table.setItem(1,1,QTableWidgetItem('HOLA'))
+        
 
         ## VARIABLES AUXILIARES ##
         
         self.n_piezas_total = int
         self.n_cajas_total = int
         self.n_pales_total = int
+        self.estado_marcha = int
 
     ## FECHA ACTUAL ##
     def fecha_actual(self):
@@ -70,6 +94,12 @@ class gui_api_scada(QMainWindow):
         
     ## ENVIAR A TABLA ##
     def visualizar_tabla(self,list_all_envios):
+        if list_all_envios[0]=='server_inactivo':
+            self.estado_server.setText('INACTIVO')
+            self.estado_server.setStyleSheet("color: red")
+        else:    
+            self.estado_server.setText('ACTIVO')
+            self.estado_server.setStyleSheet("color: green")
             print(f'BdD Envios: {list_all_envios}')
             inv_codigo =  []
             inv_piezas = []
@@ -113,13 +143,20 @@ class gui_api_scada(QMainWindow):
                     n_piezas_id_max = dict_json_all_envios_id_max['piezas']
                     n_cajas_id_max = dict_json_all_envios_id_max['cajas']
                     n_pales_id_max = dict_json_all_envios_id_max['pales']
-
+                    estado_marcha = dict_json_all_envios_id_max['marcha']
+            
             self.n_piezas_total = (n_piezas_id_max) + (4 * (n_pales_id_max-1))
             self.n_cajas_total = (n_cajas_id_max) + (4 * (n_pales_id_max-1))
             self.n_pales_total = n_pales_id_max - 1
             self.in_n_piezas.setText(str(self.n_piezas_total))
             self.in_n_cajas.setText(str(self.n_cajas_total))
             self.in_n_pales.setText(str(self.n_pales_total))
+            if estado_marcha==1:
+                self.estado_maquina.setText('MARCHA')
+                self.estado_maquina.setStyleSheet("color: green")
+            else:
+                self.estado_maquina.setText('PARO')
+                self.estado_maquina.setStyleSheet("color: orange")
         
 
         

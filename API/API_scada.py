@@ -29,8 +29,7 @@ conexion = Conexion()
 
 ## VARIABLES ##
 mensaje_plc = dict
-codigo_inicial = 1000000    
-
+codigo_inicial = 56489712    
 ## ENVIOS ##
 @api_scada.get("/envios")
 def get_envios():
@@ -50,22 +49,19 @@ async def post_envios(requests: Request):
             valores_mensaje.append(int.from_bytes(mensaje_separado[i].encode('ascii'), byteorder='little'))
         else:
             valores_mensaje.append(0)    
-    creacion_codigo = codigo_inicial + 1
-    if len(mensaje_separado)==4:
+    
+    if len(mensaje_separado)==4: 
         mensaje_plc = dict(
-            codigo = creacion_codigo,
+            codigo = codigo_inicial,
             piezas = valores_mensaje[0],
             cajas = valores_mensaje[1],
             pales = valores_mensaje[2],
             marcha = valores_mensaje[3],
         )
 
+
     print(f'Datos enviados del PLC a la BdD Envios: {mensaje_plc}')
     conexion.insertar_envios(mensaje_plc)
-        
-        
-    if mensaje_plc['marcha']==1:
-        visualizar_tabla()
     return 'Datos recibidos OK'
 
 @api_scada.delete("/envios")
