@@ -20,7 +20,7 @@
    <widget class="QLabel" name="label_n_piezas">
     <property name="geometry">
      <rect>
-      <x>1150</x>
+      <x>900</x>
       <y>1090</y>
       <width>221</width>
       <height>31</height>
@@ -45,7 +45,7 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLabel" name="label_n_cajas">
     <property name="geometry">
      <rect>
-      <x>1150</x>
+      <x>900</x>
       <y>1140</y>
       <width>221</width>
       <height>31</height>
@@ -67,10 +67,10 @@ background-color: rgb(0, 0, 0);</string>
      <string>Total cajas</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="in_n_piezas">
+   <widget class="QLineEdit" name="out_n_piezas">
     <property name="geometry">
      <rect>
-      <x>1380</x>
+      <x>1130</x>
       <y>1090</y>
       <width>131</width>
       <height>31</height>
@@ -88,10 +88,10 @@ background-color: rgb(0, 0, 0);</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="in_n_cajas">
+   <widget class="QLineEdit" name="out_n_cajas">
     <property name="geometry">
      <rect>
-      <x>1380</x>
+      <x>1130</x>
       <y>1140</y>
       <width>131</width>
       <height>31</height>
@@ -112,7 +112,7 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLabel" name="label_n_pales">
     <property name="geometry">
      <rect>
-      <x>1150</x>
+      <x>900</x>
       <y>1190</y>
       <width>221</width>
       <height>31</height>
@@ -134,10 +134,10 @@ color: rgb(255, 255, 255);</string>
      <string>Pales terminados</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="in_n_pales">
+   <widget class="QLineEdit" name="out_n_pales">
     <property name="geometry">
      <rect>
-      <x>1380</x>
+      <x>1130</x>
       <y>1190</y>
       <width>131</width>
       <height>31</height>
@@ -209,8 +209,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_estado_maquina">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>170</y>
+      <x>10</x>
+      <y>100</y>
       <width>231</width>
       <height>31</height>
      </rect>
@@ -233,8 +233,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="estado_maquina">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>170</y>
+      <x>280</x>
+      <y>100</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -257,8 +257,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_estado_server">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>140</y>
+      <x>10</x>
+      <y>30</y>
       <width>201</width>
       <height>21</height>
      </rect>
@@ -281,8 +281,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="estado_server">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>140</y>
+      <x>280</x>
+      <y>30</y>
       <width>121</width>
       <height>21</height>
      </rect>
@@ -302,19 +302,384 @@ color: rgb(255, 255, 255);</string>
      <string>INACTIVO</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_estado_plc">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Estado del PLC:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="estado_plc">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>60</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>STOP</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cbox_listado">
+    <property name="geometry">
+     <rect>
+      <x>1290</x>
+      <y>280</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_cbox_listado">
+    <property name="geometry">
+     <rect>
+      <x>1380</x>
+      <y>240</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Listado</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_busqueda">
+    <property name="geometry">
+     <rect>
+      <x>1040</x>
+      <y>240</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Búsqueda</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>280</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="boton_descargar">
+    <property name="geometry">
+     <rect>
+      <x>1630</x>
+      <y>260</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.394737 rgba(0, 0, 0, 255), stop:0.721053 rgba(0, 0, 0, 255), stop:0.936842 rgba(255, 255, 255, 255), stop:1 rgba(0, 0, 0, 255));
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>DESCARGAR</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_produccion">
+    <property name="geometry">
+     <rect>
+      <x>1290</x>
+      <y>1050</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Produccion</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_media_piezas">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>1090</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Sin datos</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_media_cajas">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>1140</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Sin datos</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_media_pales">
+    <property name="geometry">
+     <rect>
+      <x>1280</x>
+      <y>1190</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Sin datos</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_fecha">
+    <property name="geometry">
+     <rect>
+      <x>1630</x>
+      <y>20</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Fecha y hora</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_maquina">
+    <property name="geometry">
+     <rect>
+      <x>1300</x>
+      <y>390</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>MÁQUINA</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>430</y>
+      <width>821</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qconicalgradient(cx:0.494789, cy:0.523, angle:289.7, stop:0 rgba(35, 40, 3, 255), stop:0.16 rgba(136, 106, 22, 255), stop:0.225 rgba(166, 140, 41, 255), stop:0.285 rgba(204, 181, 74, 255), stop:0.345 rgba(235, 219, 102, 255), stop:0.415 rgba(245, 236, 112, 255), stop:0.52 rgba(209, 190, 76, 255), stop:0.57 rgba(187, 156, 51, 255), stop:0.635 rgba(168, 142, 42, 255), stop:0.695 rgba(202, 174, 68, 255), stop:0.75 rgba(218, 202, 86, 255), stop:0.815 rgba(208, 187, 73, 255), stop:0.88 rgba(187, 156, 51, 255), stop:0.935 rgba(137, 108, 26, 255), stop:1 rgba(35, 40, 3, 255));</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_cond_reposo">
+    <property name="geometry">
+     <rect>
+      <x>1060</x>
+      <y>510</y>
+      <width>191</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Sin datos</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="out_pick_reposo">
+    <property name="geometry">
+     <rect>
+      <x>1460</x>
+      <y>500</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Sin datos</string>
+    </property>
+   </widget>
    <zorder>img_fondo</zorder>
    <zorder>label_n_piezas</zorder>
    <zorder>label_n_cajas</zorder>
-   <zorder>in_n_piezas</zorder>
-   <zorder>in_n_cajas</zorder>
+   <zorder>out_n_piezas</zorder>
+   <zorder>out_n_cajas</zorder>
    <zorder>label_n_pales</zorder>
-   <zorder>in_n_pales</zorder>
+   <zorder>out_n_pales</zorder>
    <zorder>table</zorder>
    <zorder>logo</zorder>
    <zorder>label_estado_maquina</zorder>
    <zorder>estado_maquina</zorder>
    <zorder>label_estado_server</zorder>
    <zorder>estado_server</zorder>
+   <zorder>label_estado_plc</zorder>
+   <zorder>estado_plc</zorder>
+   <zorder>cbox_listado</zorder>
+   <zorder>label_cbox_listado</zorder>
+   <zorder>label_busqueda</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>boton_descargar</zorder>
+   <zorder>label_produccion</zorder>
+   <zorder>out_media_piezas</zorder>
+   <zorder>out_media_cajas</zorder>
+   <zorder>out_media_pales</zorder>
+   <zorder>out_fecha</zorder>
+   <zorder>label_maquina</zorder>
+   <zorder>line</zorder>
+   <zorder>out_cond_reposo</zorder>
+   <zorder>out_pick_reposo</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -11,7 +11,7 @@ import subprocess
 from threading import Thread
 
 class BackendThread(QObject):
-    refresh = pyqtSignal(list)
+    refresh = pyqtSignal(list,bool)
     ip_api= 'http://localhost:8000/'
     list_all_envios: list
     respuesta_server:bool
@@ -20,27 +20,32 @@ class BackendThread(QObject):
         
         while True:
             
-            try:
-                all_envios = requests.get(f'{self.ip_api}envios',timeout=4)
+            
+            all_datos = requests.get(f'{self.ip_api}datos',timeout=4)
+            if all_datos.status_code==200:  
                 self.respuesta_server= True
                 print(f'Server {self.ip_api} ACTIVO')
-            except (requests.exceptions.ConnectTimeout,requests.exceptions.ReadTimeout):
+                sleep(1)
+            else:
                 self.respuesta_server=False
                 print(f'Server {self.ip_api} INACTIVO')
                 sleep(1)
                 
         
             if self.respuesta_server==True:
-                json_all_envios = all_envios.json()
-                list_all_envios = [dict(id_item) for id_item in json_all_envios]
-                self.refresh.emit(list_all_envios)
+                server = True
+                json_all_datos = all_datos.json()
+                list_all_datos = [dict(id_item) for id_item in json_all_datos]
+                self.refresh.emit(list_all_datos,server)
+                self.respuesta_server=False
             else:
                 info_server = 'server_inactivo'
-                list_all_envios.append(info_server)
-                self.refresh.emit(list_all_envios)
-                print(list_all_envios)
-                list_all_envios= []
-                print(list_all_envios)
+                server = False
+                list_all_datos.append(info_server)
+                self.refresh.emit(list_all_datos,server)
+                print(list_all_datos)
+                list_all_datos= []
+                print(list_all_datos)
 
             
             
@@ -84,34 +89,44 @@ class gui_api_scada(QMainWindow):
         self.n_cajas_total = int
         self.n_pales_total = int
         self.estado_marcha = int
+        self.contaje_aux = bool
+        
 
     ## FECHA ACTUAL ##
     def fecha_actual(self):
         ahora = datetime.now()
-        formato = "%Y-%m-%d_%H:%M:%S"
+        formato = "%d-%m-%Y_%H:%M"
         fecha_hora_actual = ahora.strftime(formato)
         return fecha_hora_actual
         
     ## ENVIAR A TABLA ##
-    def visualizar_tabla(self,list_all_envios):
-        if list_all_envios[0]=='server_inactivo':
+    def visualizar_tabla(self,list_all_datos,server):
+        fecha_recibida = self.fecha_actual()
+        self.out_fecha.setText(fecha_recibida)
+        
+        if ((len(list_all_datos)==0) or (list_all_datos==None))and server==False:
             self.estado_server.setText('INACTIVO')
             self.estado_server.setStyleSheet("color: red")
+            self.estado_plc.setText('STOP')
+            self.estado_maquina.setText('PLC INACTIVO')
         else:    
             self.estado_server.setText('ACTIVO')
             self.estado_server.setStyleSheet("color: green")
-            print(f'BdD Envios: {list_all_envios}')
+            print(f'BdD Envios: {list_all_datos}')
+            
+            
             inv_codigo =  []
             inv_piezas = []
             inv_cajas = []
             inv_pales = []
                 
-            for i in range(0,len(list_all_envios)):
-                dict_json_all_envio = list_all_envios[i]
-                valor_codigo = dict_json_all_envio['codigo']
-                valor_piezas = dict_json_all_envio['piezas']
-                valor_cajas = dict_json_all_envio['cajas']
-                valor_pales = dict_json_all_envio['pales']
+            for i in range(0,len(list_all_datos)):
+                dict_json_all_datos = list_all_datos[i]
+
+                valor_codigo = dict_json_all_datos['codigo']
+                valor_piezas = dict_json_all_datos['piezas']
+                valor_cajas = dict_json_all_datos['cajas']
+                valor_pales = dict_json_all_datos['pales']
 
                 inv_codigo.append(valor_codigo)
                 inv_piezas.append(valor_piezas)
@@ -131,32 +146,60 @@ class gui_api_scada(QMainWindow):
                 for m, item in enumerate(inventario[key]):
                     self.table.setItem(m,n,QTableWidgetItem(str(item)))
             self.table.verticalHeader().setDefaultSectionSize(80)
-            list_id = []
-            for i in range(0,len(list_all_envios)):
-                dict_json_all_envios_id = list_all_envios[i]
-                n_id = dict_json_all_envios_id['id']
-                list_id.append(n_id)
-            n_id_max = max(list_id)
-            for i in range(0,len(list_all_envios)):
-                dict_json_all_envios_id_max = list_all_envios[i]
-                if dict_json_all_envios_id_max['id']==n_id_max:
-                    n_piezas_id_max = dict_json_all_envios_id_max['piezas']
-                    n_cajas_id_max = dict_json_all_envios_id_max['cajas']
-                    n_pales_id_max = dict_json_all_envios_id_max['pales']
-                    estado_marcha = dict_json_all_envios_id_max['marcha']
             
-            self.n_piezas_total = (n_piezas_id_max) + (4 * (n_pales_id_max-1))
-            self.n_cajas_total = (n_cajas_id_max) + (4 * (n_pales_id_max-1))
-            self.n_pales_total = n_pales_id_max - 1
-            self.in_n_piezas.setText(str(self.n_piezas_total))
-            self.in_n_cajas.setText(str(self.n_cajas_total))
-            self.in_n_pales.setText(str(self.n_pales_total))
-            if estado_marcha==1:
-                self.estado_maquina.setText('MARCHA')
-                self.estado_maquina.setStyleSheet("color: green")
-            else:
-                self.estado_maquina.setText('PARO')
-                self.estado_maquina.setStyleSheet("color: orange")
+
+            dict_all_datos_id_max = {}
+            if len(list_all_datos)>0:
+                self.estado_plc.setText('RUN')
+                self.estado_plc.setStyleSheet("color: green")
+                list_id = []
+                for i in range(0,len(list_all_datos)):
+                    dict_all_datos_id = list_all_datos[i]
+                    n_id = dict_all_datos_id['id']
+                    list_id.append(n_id)
+                n_id_max = max(list_id)
+                for i in range(0,len(list_all_datos)):
+                    dict_all_datos_id_max = list_all_datos[i]
+                    if dict_all_datos_id_max['id']==n_id_max:
+                            
+                            if dict_all_datos_id_max['emergencias']==1:
+                                self.estado_maquina.setText('EMERGENCIA')
+                                self.estado_maquina.setStyleSheet("color: red")
+                            elif dict_all_datos_id_max['paro']==1:
+                                self.estado_maquina.setText('PARO')
+                                self.estado_maquina.setStyleSheet("color: red")
+                            
+                            elif dict_all_datos_id_max['marcha']==1:
+                                self.estado_maquina.setText('MARCHA')
+                                self.estado_maquina.setStyleSheet("color: green")
+                                if dict_all_datos_id_max['contaje']==1:
+                                    n_piezas_id_max = dict_all_datos_id_max['piezas']
+                                    n_cajas_id_max = dict_all_datos_id_max['cajas']
+                                    n_pales_id_max = dict_all_datos_id_max['pales']
+                                    self.n_piezas_total = (n_piezas_id_max) + (4 * (n_pales_id_max-1))
+                                    self.n_cajas_total = (n_cajas_id_max) + (4 * (n_pales_id_max-1))
+                                    self.n_pales_total = n_pales_id_max -1
+                                    self.out_n_piezas.setText(str(self.n_piezas_total))
+                                    self.out_n_cajas.setText(str(self.n_cajas_total))
+                                    self.out_n_pales.setText(str(self.n_pales_total))
+                            
+                            if dict_all_datos_id_max['cond_reposo']==1:
+                                self.out_cond_reposo.setText('Maquina en reposo')
+                            else:
+                                self.out_cond_reposo.setText('Maquina funcionando')
+                            
+                            if dict_all_datos_id_max['pick_reposo']==1:
+                                self.out_pick_reposo.setText('Pick en reposo')
+                            else:
+                                self.out_pick_reposo.setText('Pick funcionando')
+
+
+            
+                
+                
+                        
+
+            
         
 
         
