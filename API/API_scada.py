@@ -16,11 +16,8 @@ import codecs
 ## CLASE PARA RECIBIR DATOS PLC ##
 class Envio_PLC(BaseModel):         
     envio: bytes
-## CLASE CREACION GUI (INTERFAZ GRAFICA EN PYQT5) ##
 
 
-
-    
 ## CREACION API ##
 api_scada = FastAPI() 
 
@@ -45,11 +42,37 @@ async def post_envios(requests: Request):
     mensaje_separado = list(mensaje_str)
     print(mensaje_separado)
     valores_mensaje = []
+    
     for i in range(0,len(mensaje_separado)):
         if mensaje_separado[i] != 'p':
             valores_mensaje.append(int.from_bytes(mensaje_separado[i].encode('ascii'), byteorder='little'))
         else:
             valores_mensaje.append(0)    
+    
+    valor_app_piezas = str
+    valor_app_cajas = str
+    if valores_mensaje[5] ==0:
+        valor_app_piezas= ' '
+    elif valores_mensaje[5] ==1:
+        valor_app_piezas= 'Piston'
+    elif valores_mensaje[5] ==2:
+        valor_app_piezas= 'Biela'
+    elif valores_mensaje[5] ==3:
+        valor_app_piezas= 'Culata'
+    elif valores_mensaje[5] ==4:
+        valor_app_piezas= 'Cilindro' 
+    
+
+    if valores_mensaje[7] ==0:
+        valor_app_cajas= ' '
+    elif valores_mensaje[7] ==1:
+        valor_app_cajas= 'Segmentos'
+    elif valores_mensaje[7] ==2:
+        valor_app_cajas= 'Rodamientos'
+    elif valores_mensaje[7] ==3:
+        valor_app_cajas= 'Tornillos'
+    elif valores_mensaje[7] ==4:
+        valor_app_cajas= 'Juntas'
     
     if len(mensaje_separado)==22: 
         mensaje_plc = dict(
@@ -58,9 +81,9 @@ async def post_envios(requests: Request):
             paro = valores_mensaje[2],
             marcha = valores_mensaje[3],
             piezas = valores_mensaje[4],
-            app_piezas = valores_mensaje[5],
+            app_piezas = valor_app_piezas,
             cajas = valores_mensaje[6],
-            contenido_cajas = valores_mensaje[7],
+            contenido_cajas = valor_app_cajas,
             pales = valores_mensaje[8],
             codigo = str(valores_mensaje[9])+str(valores_mensaje[10])+str(valores_mensaje[11])+str(valores_mensaje[12]),
             cond_reposo = valores_mensaje[13],
@@ -71,7 +94,7 @@ async def post_envios(requests: Request):
             cinta_piezas = valores_mensaje[18],
             cinta_cajas = valores_mensaje[19],
             cinta_pales = valores_mensaje[20],
-            contaje = valores_mensaje[21],
+            contaje = int(valores_mensaje[21]),
             fecha = fecha_actual()
         )
 

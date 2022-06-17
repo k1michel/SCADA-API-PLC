@@ -20,8 +20,8 @@
    <widget class="QLabel" name="label_n_piezas">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>1090</y>
+      <x>960</x>
+      <y>1020</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -45,8 +45,8 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLabel" name="label_n_cajas">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>1140</y>
+      <x>960</x>
+      <y>1070</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -70,8 +70,8 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLineEdit" name="out_n_piezas">
     <property name="geometry">
      <rect>
-      <x>1130</x>
-      <y>1090</y>
+      <x>1190</x>
+      <y>1020</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -91,8 +91,8 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLineEdit" name="out_n_cajas">
     <property name="geometry">
      <rect>
-      <x>1130</x>
-      <y>1140</y>
+      <x>1190</x>
+      <y>1070</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -112,8 +112,8 @@ background-color: rgb(0, 0, 0);</string>
    <widget class="QLabel" name="label_n_pales">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>1190</y>
+      <x>960</x>
+      <y>1120</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -137,8 +137,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLineEdit" name="out_n_pales">
     <property name="geometry">
      <rect>
-      <x>1130</x>
-      <y>1190</y>
+      <x>1190</x>
+      <y>1120</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -180,9 +180,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QTableWidget" name="table">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>260</y>
-      <width>701</width>
+      <x>70</x>
+      <y>190</y>
+      <width>831</width>
       <height>961</height>
      </rect>
     </property>
@@ -235,7 +235,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>280</x>
       <y>100</y>
-      <width>121</width>
+      <width>241</width>
       <height>31</height>
      </rect>
     </property>
@@ -251,7 +251,7 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>PARO</string>
+     <string>CONECTANDO ...</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_estado_server">
@@ -283,7 +283,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>280</x>
       <y>30</y>
-      <width>121</width>
+      <width>261</width>
       <height>21</height>
      </rect>
     </property>
@@ -299,7 +299,7 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>INACTIVO</string>
+     <string>CONECTANDO ...</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_estado_plc">
@@ -331,7 +331,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>280</x>
       <y>60</y>
-      <width>141</width>
+      <width>241</width>
       <height>31</height>
      </rect>
     </property>
@@ -347,7 +347,7 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>STOP</string>
+     <string>CONECTANDO ...</string>
     </property>
    </widget>
    <widget class="QComboBox" name="cbox_listado">
@@ -421,8 +421,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="boton_descargar">
     <property name="geometry">
      <rect>
-      <x>1630</x>
-      <y>260</y>
+      <x>1570</x>
+      <y>270</y>
       <width>161</width>
       <height>51</height>
      </rect>
@@ -446,8 +446,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_produccion">
     <property name="geometry">
      <rect>
-      <x>1290</x>
-      <y>1050</y>
+      <x>1350</x>
+      <y>980</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -470,8 +470,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="out_media_piezas">
     <property name="geometry">
      <rect>
-      <x>1280</x>
-      <y>1090</y>
+      <x>1340</x>
+      <y>1020</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -494,8 +494,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="out_media_cajas">
     <property name="geometry">
      <rect>
-      <x>1280</x>
-      <y>1140</y>
+      <x>1340</x>
+      <y>1070</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -518,8 +518,8 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="out_media_pales">
     <property name="geometry">
      <rect>
-      <x>1280</x>
-      <y>1190</y>
+      <x>1340</x>
+      <y>1120</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -560,7 +560,10 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Fecha y hora</string>
+     <string>----------</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label_maquina">
@@ -606,9 +609,9 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="out_cond_reposo">
     <property name="geometry">
      <rect>
-      <x>1060</x>
-      <y>510</y>
-      <width>191</width>
+      <x>930</x>
+      <y>490</y>
+      <width>241</width>
       <height>41</height>
      </rect>
     </property>
@@ -624,16 +627,19 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Sin datos</string>
+     <string>-----</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="out_pick_reposo">
     <property name="geometry">
      <rect>
-      <x>1460</x>
-      <y>500</y>
-      <width>181</width>
-      <height>51</height>
+      <x>1480</x>
+      <y>490</y>
+      <width>221</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -648,7 +654,83 @@ color: rgb(255, 255, 255);</string>
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Sin datos</string>
+     <string>-----</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_cond_reposo">
+    <property name="geometry">
+     <rect>
+      <x>950</x>
+      <y>460</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Condiciones de reposo</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_pick_reposo">
+    <property name="geometry">
+     <rect>
+      <x>1530</x>
+      <y>460</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Pick &amp; Place</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="boton_borrar_base_datos">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>1170</y>
+      <width>161</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Comic Sans MS</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.394737 rgba(104, 0, 0, 255), stop:0.721053 rgba(113, 0, 0, 255), stop:0.936842 rgba(255, 255, 255, 255), stop:1 rgba(0, 0, 0, 255));
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>BORRAR BdD</string>
     </property>
    </widget>
    <zorder>img_fondo</zorder>
@@ -680,6 +762,9 @@ color: rgb(255, 255, 255);</string>
    <zorder>line</zorder>
    <zorder>out_cond_reposo</zorder>
    <zorder>out_pick_reposo</zorder>
+   <zorder>label_cond_reposo</zorder>
+   <zorder>label_pick_reposo</zorder>
+   <zorder>boton_borrar_base_datos</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
