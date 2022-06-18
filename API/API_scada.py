@@ -170,15 +170,10 @@ def seleccionar_envios(mensaje_plc):
         if dict_all_envios_id_max['id']==n_id_max:
             if dict_all_envios_id_max['plc_run']==1:
                 mensaje_maquina = dict(
+                    plc_run = dict_all_envios_id_max['plc_run'],
                     emergencias = dict_all_envios_id_max['emergencias'],
                     paro = dict_all_envios_id_max['paro'],
                     marcha = dict_all_envios_id_max['marcha'],
-                    piezas = dict_all_envios_id_max['piezas'],
-                    app_piezas = dict_all_envios_id_max['app_piezas'],
-                    cajas = dict_all_envios_id_max['cajas'],
-                    contenido_cajas = dict_all_envios_id_max['contenido_cajas'],
-                    pales = dict_all_envios_id_max['pales'],
-                    codigo = dict_all_envios_id_max['codigo'],
                     cond_reposo = dict_all_envios_id_max['cond_reposo'],
                     pick_reposo = dict_all_envios_id_max['pick_reposo'],
                     ftc_piezas = dict_all_envios_id_max['ftc_piezas'],
@@ -191,31 +186,20 @@ def seleccionar_envios(mensaje_plc):
                     fecha = dict_all_envios_id_max['fecha'],
                 )
                 conexion.insertar_maquina(mensaje_maquina)
-                seleccionar_maquina(mensaje_maquina)
+                seleccionar_maquina(mensaje_maquina,mensaje_plc)
 
-def seleccionar_maquina(mensaje_maquina):
+def seleccionar_maquina(mensaje_maquina,mensaje_plc):
     
     if mensaje_maquina['contaje']==1:
         mensaje_datos = dict(
-            emergencias = mensaje_maquina['emergencias'],
-            paro = mensaje_maquina['paro'],
-            marcha = mensaje_maquina['marcha'],
-            piezas = mensaje_maquina['piezas'],
-            app_piezas = mensaje_maquina['app_piezas'],
-            cajas = mensaje_maquina['cajas'],
-            contenido_cajas = mensaje_maquina['contenido_cajas'],
-            pales = mensaje_maquina['pales'],
-            codigo = mensaje_maquina['codigo'],
-            cond_reposo = mensaje_maquina['cond_reposo'],
-            pick_reposo = mensaje_maquina['pick_reposo'],
-            ftc_piezas = mensaje_maquina['ftc_piezas'],
-            ftc_cajas = mensaje_maquina['ftc_cajas'],
-            ftc_pales = mensaje_maquina['ftc_pales'],
-            cinta_piezas = mensaje_maquina['cinta_piezas'],
-            cinta_cajas = mensaje_maquina['cinta_piezas'],
-            cinta_pales = mensaje_maquina['cinta_pales'],
-            contaje = mensaje_maquina['contaje'],
-            fecha = mensaje_maquina['fecha'],
+            piezas = mensaje_plc['piezas'],
+            app_piezas = mensaje_plc['app_piezas'],
+            cajas = mensaje_plc['cajas'],
+            contenido_cajas = mensaje_plc['contenido_cajas'],
+            pales = mensaje_plc['pales'],
+            codigo = mensaje_plc['codigo'],
+            contaje = mensaje_plc['contaje'],
+            fecha = mensaje_plc['fecha'],
         )
         conexion.insertar_datos(mensaje_datos)                 
                             
