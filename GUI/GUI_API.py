@@ -9,6 +9,8 @@ from time import sleep
 from datetime import datetime
 import subprocess
 from threading import Thread
+import pandas as pd
+ 
 
 class BackendThread(QObject):
     refresh = pyqtSignal(list,bool)
@@ -86,6 +88,17 @@ class gui_api_scada(QMainWindow):
         ## BOTON BORRAR BdD ##
         self.boton_borrar_base_datos.clicked.connect(self.Borrar_base_datos)
 
+        ## SELECCION LISTADO ##
+        self.list_categorias = ['Piston','Biela','Culata','Cilindro','Segmentos','Rodamientos','Tornillos','Juntas']    
+        self.list_categorias.sort()
+        self.cbox_listado.addItems(self.list_categorias)
+        self.cbox_listado.activated.connect(self.seleccion_categoria)
+
+        ## BUSCAR CODIGO ##
+        self.in_buscar_codigo.editingFinished.connect(self.buscar_codigo)
+
+        ## BOTON DESCARGAR ##
+        self.boton_descargar.clicked.connect(self.descargar)
 
         ## VARIABLES AUXILIARES ##
         
@@ -100,6 +113,34 @@ class gui_api_scada(QMainWindow):
         self.ver_envios = False
         self.ver_maquina = False
         self.paro_fin_ciclo = 0
+        self.list_categorias = []
+        self.listado_datos = []
+        self.categoria_seleccionada = str
+        self.busqueda_codigo = str
+        self.inv_datos = {}
+
+    ## DESCARGAR ##
+    def descargar(self):
+        if self.seleccion_tiempo_real.isChecked()==True:
+            lista_excel = []
+            numero_items = len(self.inv_datos['Inv_Codigo'])
+            for i in range(0,numero_items):
+                lista_excel.append(i)
+            df = pd.DataFrame(self.inv_datos, index=[lista_excel])
+            df = (df.T)
+            fecha = self.fecha_actual() 
+            df.to_excel(f'Listado-todos.xlsx')
+        else:
+            lista_excel = []
+            numero_items = len(self.inv_datos['Inv_Codigo'])
+            for i in range(0,numero_items):
+                lista_excel.append(i)
+            df = pd.DataFrame(self.inv_datos, index=lista_excel)
+            df = (df.T)
+            fecha = self.fecha_actual() 
+            df.to_excel(f'Listado-mostrado.xlsx')
+
+
 
     ## BORRAR BASES DE DATOS ##
     def Borrar_base_datos(self):
@@ -115,7 +156,7 @@ class gui_api_scada(QMainWindow):
             inv_app_piezas = [' ']
             inv_contenido_cajas = [' ']
                 
-            inv_datos = dict(
+            self.inv_datos = dict(
                 Inv_Codigo = inv_codigo,
                 Inv_Piezas = inv_piezas,
                 Inv_app_piezas = inv_app_piezas,
@@ -126,8 +167,8 @@ class gui_api_scada(QMainWindow):
             #print(f'Datos para mostrar: {inv_datos}')
             self.table.clear()
             self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
-            for n, key in enumerate(inv_datos.keys()):
-                for m, item in enumerate(inv_datos[key]):
+            for n, key in enumerate(self.inv_datos.keys()):
+                for m, item in enumerate(self.inv_datos[key]):
                     self.table.setItem(m,n,QTableWidgetItem(str(item)))
             self.table.verticalHeader().setDefaultSectionSize(80)
         except(requests.exceptions.ConnectionError):
@@ -148,18 +189,30 @@ class gui_api_scada(QMainWindow):
         fecha_hora_actual = ahora.strftime(formato)
         return fecha_hora_actual
         
-    ## ENVIAR A TABLA ##
+    ## VISUALIZAR DE BdD A GUI ##
     def visualizar(self,list_all_datos,server):
+        # Listado de los datos recibidos con self para exportarlos a otra funcion
+        self.listado_datos = []
+        for n in range(0,len(list_all_datos)):
+            self.listado_datos.append(list_all_datos[n])
+        
+        #Fecha y hora real
         fecha_recibida = self.fecha_actual()
         self.out_fecha.setText(fecha_recibida)
+
         if server == False:
             self.primer_ciclo = False
             self.ver_envios = False
             self.ver_maquina = False
-
+        print(f'Primer ciclo:{self.primer_ciclo}')
+        print(f'Ver envios: {self.ver_envios}')
+        print(f'Ver maquina: {self.ver_maquina}')
+        ## DATOS ##
         if self.primer_ciclo == True and self.ver_envios==True and self.ver_maquina==True and server==True:
                 dict_all_datos_id_max = {}
                 if len(list_all_datos)>0:
+                    
+                    #Produccion
                     list_id = []
                     for i in range(0,len(list_all_datos)):
                         dict_all_datos_id = list_all_datos[i]
@@ -201,9 +254,6 @@ class gui_api_scada(QMainWindow):
                         list_horas.append(int(str_hora))
                         list_minutos.append(int(str_minutos))
                         list_segundos.append(int(str_segundos))
-                    print(f'Lista de horas {list_horas}')
-                    print(f'Lista de minutos {list_minutos}')
-                    print(f'Lista de segundos {list_segundos}')
                     
                     otro_dia= False
                     n_dias = 0
@@ -247,57 +297,59 @@ class gui_api_scada(QMainWindow):
                         self.out_media_piezas.setText(str(0.00))
                     if media_cajas_minutos>0.00:
                         redon_media_cajas = round(media_cajas_minutos,2)
-                        self.out_media_cajas.setText(str(redon_media_cajas))
+                        self.out_media_cajas.setText(str(redon_media_cajas)+' uds/min')
                     else:
-                        self.out_media_cajas.setText(str(0.00))
+                        self.out_media_cajas.setText(str(0.00)+' uds/min')
                     if media_pales_minutos>0.00:
                         redon_media_pales = round(media_pales_minutos,2)
-                        self.out_media_pales.setText(str(redon_media_pales))
+                        self.out_media_pales.setText(str(redon_media_pales)+' uds/min')
                     else:
                         self.out_media_pales.setText(str(0.00))
                     
                     # Mostrar datos en tabla en tiempo real
-                    inv_codigo =  []
-                    inv_piezas = []
-                    inv_cajas = []
-                    inv_pales = []
-                    inv_app_piezas = []
-                    inv_contenido_cajas = []
+                    print(self.seleccion_tiempo_real.isChecked())
+                    if self.seleccion_tiempo_real.isChecked()==True:
+                        inv_codigo =  []
+                        inv_piezas = []
+                        inv_cajas = []
+                        inv_pales = []
+                        inv_app_piezas = []
+                        inv_contenido_cajas = []
 
-                    for v in range(0,len(list_all_datos)):
-                        dict_all_datos = list_all_datos[v]
-                        valor_codigo = dict_all_datos['codigo']
-                        valor_piezas = dict_all_datos['piezas']
-                        valor_app_piezas = dict_all_datos['app_piezas']
-                        valor_cajas = dict_all_datos['cajas']
-                        valor_contenido_cajas = dict_all_datos['contenido_cajas']
-                        valor_pales = dict_all_datos['pales']
+                        for v in range(0,len(list_all_datos)):
+                            dict_all_datos = list_all_datos[v]
+                            valor_codigo = dict_all_datos['codigo']
+                            valor_piezas = dict_all_datos['piezas']
+                            valor_app_piezas = dict_all_datos['app_piezas']
+                            valor_cajas = dict_all_datos['cajas']
+                            valor_contenido_cajas = dict_all_datos['contenido_cajas']
+                            valor_pales = dict_all_datos['pales']
 
-                        inv_codigo.append(valor_codigo)
-                        inv_piezas.append(valor_piezas)
-                        inv_app_piezas.append(valor_app_piezas)
-                        inv_cajas.append(valor_cajas)
-                        inv_contenido_cajas.append(valor_contenido_cajas)
-                        inv_pales.append(valor_pales)
-                    
-                    inv_datos = dict(
-                        Inv_Codigo = inv_codigo,
-                        Inv_Piezas = inv_piezas,
-                        Inv_app_piezas = inv_app_piezas,
-                        Inv_Cajas = inv_cajas,
-                        Inv_contenido_cajas = inv_contenido_cajas,
-                        Inv_Pales = inv_pales,
-                    )
-                    #print(f'Datos para mostrar: {inv_datos}')
-                    self.table.clear()
-                    self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
-                    for n, key in enumerate(inv_datos.keys()):
-                        for m, item in enumerate(inv_datos[key]):
-                            self.table.setItem(m,n,QTableWidgetItem(str(item)))
-                    self.table.verticalHeader().setDefaultSectionSize(80)
+                            inv_codigo.append(valor_codigo)
+                            inv_piezas.append(valor_piezas)
+                            inv_app_piezas.append(valor_app_piezas)
+                            inv_cajas.append(valor_cajas)
+                            inv_contenido_cajas.append(valor_contenido_cajas)
+                            inv_pales.append(valor_pales)
+                        
+                        self.inv_datos = dict(
+                            Inv_Codigo = inv_codigo,
+                            Inv_Piezas = inv_piezas,
+                            Inv_app_piezas = inv_app_piezas,
+                            Inv_Cajas = inv_cajas,
+                            Inv_contenido_cajas = inv_contenido_cajas,
+                            Inv_Pales = inv_pales,
+                        )
+                        print(f'Datos para mostrar: {self.inv_datos}')
+                        self.table.clear()
+                        self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
+                        for n, key in enumerate(self.inv_datos.keys()):
+                            for m, item in enumerate(self.inv_datos[key]):
+                                self.table.setItem(m,n,QTableWidgetItem(str(item)))
+                        self.table.verticalHeader().setDefaultSectionSize(80)     
 
 
-
+        ## MAQUINA ##
         if self.primer_ciclo==True and self.ver_envios==True and server==True:    
             try:
                 all_maquina = requests.get(f'{self.ip_api}maquina',timeout=4)
@@ -323,6 +375,9 @@ class gui_api_scada(QMainWindow):
                 self.out_cinta_piezas.setStyleSheet("background-color: white")
                 self.out_cinta_cajas.setStyleSheet("background-color: white")
                 self.out_cinta_pales.setStyleSheet("background-color: white")
+                self.out_media_piezas.setText('-----')
+                self.out_media_cajas.setText('-----')
+                self.out_media_pales.setText('-----')
             
             if server == True:
                 
@@ -330,6 +385,8 @@ class gui_api_scada(QMainWindow):
                 list_all_maquina = [dict(id_item) for id_item in json_all_maquina]
                 list_id_maquina = []
                 if len(list_all_maquina)>1:
+                    
+                    #Acciones de estado plc Run
                     for i in range(0,len(list_all_maquina)):
                         dict_all_maquina_id = list_all_maquina[i]
                         n_id_maquina = dict_all_maquina_id['id']
@@ -355,6 +412,7 @@ class gui_api_scada(QMainWindow):
                                 estado_cinta_cajas = dict_all_maquina['cinta_cajas']
                                 estado_cinta_pales = dict_all_maquina['cinta_pales']
                                 
+                                #Estados de maquina
                                 if estado_emergencias==1:
                                     self.estado_maquina.setText('EMERGENCIA')
                                     self.estado_maquina.setStyleSheet("color: red")
@@ -368,6 +426,7 @@ class gui_api_scada(QMainWindow):
                                     self.estado_maquina.setText('MARCHA')
                                     self.estado_maquina.setStyleSheet("color: green")
                                 
+                                #Estado condiciones de reposo y pick&place reposo
                                 if estado_cond_reposo==1:
                                     self.out_cond_reposo.setText('Activas')
                                 else:
@@ -377,6 +436,7 @@ class gui_api_scada(QMainWindow):
                                 else:
                                     self.out_pick_reposo.setText('Operando...')
                                 
+                                #Estado sensores y actuadores
                                 if estado_ftc_piezas == 1:
                                     self.out_ftc_piezas.setStyleSheet("background-color: red")
                                 else:
@@ -403,7 +463,7 @@ class gui_api_scada(QMainWindow):
                                     self.out_cinta_pales.setStyleSheet("background-color: red")
                                 
                     self.ver_maquina = True
-
+                # Estado plc RUN/ STOP
                 if ((len(list_all_maquina)) > (self.long_list_maquina)) and self.long_list_maquina != 0:
                     self.estado_plc.setText('RUN')
                     self.estado_plc.setStyleSheet("color: green")
@@ -420,9 +480,13 @@ class gui_api_scada(QMainWindow):
                     self.out_cinta_piezas.setStyleSheet("background-color: white")
                     self.out_cinta_cajas.setStyleSheet("background-color: white")
                     self.out_cinta_pales.setStyleSheet("background-color: white")
+                    self.out_media_piezas.setText('-----')
+                    self.out_media_cajas.setText('-----')
+                    self.out_media_pales.setText('-----')
                 
                 self.long_list_maquina = len(list_all_maquina)
 
+        ## ENVIOS ##
         if self.primer_ciclo==False and server == True and self.ver_maquina == False:    
             try:
                 all_envios = requests.get(f'{self.ip_api}envios',timeout=4)
@@ -448,7 +512,10 @@ class gui_api_scada(QMainWindow):
                 self.out_cinta_piezas.setStyleSheet("background-color: white")
                 self.out_cinta_cajas.setStyleSheet("background-color: white")
                 self.out_cinta_pales.setStyleSheet("background-color: white") 
-                
+                self.out_media_piezas.setText('-----')
+                self.out_media_cajas.setText('-----')
+                self.out_media_pales.setText('-----')
+
             self.estado_server.setText('ACTIVO')
             self.estado_server.setStyleSheet("color: green")
             json_all_envios = all_envios.json()
@@ -466,9 +533,8 @@ class gui_api_scada(QMainWindow):
                 self.out_cond_reposo.setText('-----')
                 self.out_pick_reposo.setText('-----')
                                 
-            self.long_list_envios = len(list_all_envios)
+            self.long_list_envios = len(list_all_envios)   
                 
-            
                    
         if server==False:
             self.estado_server.setText('INACTIVO')
@@ -477,30 +543,142 @@ class gui_api_scada(QMainWindow):
             self.estado_plc.setStyleSheet("color: red")
             self.estado_maquina.setText('-----')
             self.estado_maquina.setStyleSheet("color: white")
-
-
-                
-                
-
-            
-                
-                
-                    
-                
-                
-                    
-
-                               
-                            
-
-
-            
-                
-                
-                        
-
-            
+            self.out_cond_reposo.setText('-----')
+            self.out_pick_reposo.setText('-----') 
+            self.out_ftc_piezas.setStyleSheet("background-color: white")
+            self.out_ftc_cajas.setStyleSheet("background-color: white")
+            self.out_ftc_pales.setStyleSheet("background-color: white")
+            self.out_cinta_piezas.setStyleSheet("background-color: white")
+            self.out_cinta_cajas.setStyleSheet("background-color: white")
+            self.out_cinta_pales.setStyleSheet("background-color: white") 
+            self.out_media_piezas.setText('-----')
+            self.out_media_cajas.setText('-----')
+            self.out_media_pales.setText('-----')
         
+    def seleccion_categoria(self):
+        if self.seleccion_tiempo_real.isChecked()==False:
+            self.categoria_seleccionada = self.cbox_listado.currentText()
+            listado_mostrar = []
+            if len(self.listado_datos)>0:
+                for c in range(0,len(self.listado_datos)):
+                    dict_listado_datos = self.listado_datos[c]
+                    if self.categoria_seleccionada == 'Piston':
+                        if dict_listado_datos['app_piezas']=='Piston':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Biela':
+                        if dict_listado_datos['app_piezas']=='Biela':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Culata':
+                        if dict_listado_datos['app_piezas']=='Culata':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Cilindro':
+                        if dict_listado_datos['app_piezas']=='Cilindro':
+                            listado_mostrar.append(dict_listado_datos)
+                    
+                    if self.categoria_seleccionada == 'Segmentos':
+                        if dict_listado_datos['contenido_cajas']=='Segmentos':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Rodamientos':
+                        if dict_listado_datos['contenido_cajas']=='Rodamientos':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Tornillos':
+                        if dict_listado_datos['contenido_cajas']=='Tornillos':
+                            listado_mostrar.append(dict_listado_datos)
+                    elif self.categoria_seleccionada == 'Juntas':
+                        if dict_listado_datos['contenido_cajas']=='Juntas':
+                            listado_mostrar.append(dict_listado_datos)
+
+                inv_codigo =  []
+                inv_piezas = []
+                inv_cajas = []
+                inv_pales = []
+                inv_app_piezas = []
+                inv_contenido_cajas = []
+
+                for v in range(0,len(listado_mostrar)):
+                    dict_mostrar = listado_mostrar[v]
+                    valor_codigo = dict_mostrar['codigo']
+                    valor_piezas = dict_mostrar['piezas']
+                    valor_app_piezas = dict_mostrar['app_piezas']
+                    valor_cajas = dict_mostrar['cajas']
+                    valor_contenido_cajas = dict_mostrar['contenido_cajas']
+                    valor_pales = dict_mostrar['pales']
+
+                    inv_codigo.append(valor_codigo)
+                    inv_piezas.append(valor_piezas)
+                    inv_app_piezas.append(valor_app_piezas)
+                    inv_cajas.append(valor_cajas)
+                    inv_contenido_cajas.append(valor_contenido_cajas)
+                    inv_pales.append(valor_pales)
+                            
+                self.inv_datos = dict(
+                    Inv_Codigo = inv_codigo,
+                    Inv_Piezas = inv_piezas,
+                    Inv_app_piezas = inv_app_piezas,
+                    Inv_Cajas = inv_cajas,
+                    Inv_contenido_cajas = inv_contenido_cajas,
+                    Inv_Pales = inv_pales,
+                )
+
+                self.table.clear()
+                self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
+                for n, key in enumerate(self.inv_datos.keys()):
+                    for m, item in enumerate(self.inv_datos[key]):
+                        self.table.setItem(m,n,QTableWidgetItem(str(item)))
+                self.table.verticalHeader().setDefaultSectionSize(80)
+
+    def buscar_codigo(self):
+        if self.seleccion_tiempo_real.isChecked()==False:
+            self.busqueda_codigo = self.in_buscar_codigo.text()
+            listado_mostrar = []
+            if len(self.listado_datos)>0:
+                for c in range(0,len(self.listado_datos)):
+                    dict_listado_datos = self.listado_datos[c]
+                    dict_codigo = str(dict_listado_datos['codigo'])
+                    if dict_codigo == self.busqueda_codigo:
+                        listado_mostrar.append(dict_listado_datos)
+                
+                inv_codigo =  []
+                inv_piezas = []
+                inv_cajas = []
+                inv_pales = []
+                inv_app_piezas = []
+                inv_contenido_cajas = []
+
+                for v in range(0,len(listado_mostrar)):
+                    dict_mostrar = listado_mostrar[v]
+                    valor_codigo = dict_mostrar['codigo']
+                    valor_piezas = dict_mostrar['piezas']
+                    valor_app_piezas = dict_mostrar['app_piezas']
+                    valor_cajas = dict_mostrar['cajas']
+                    valor_contenido_cajas = dict_mostrar['contenido_cajas']
+                    valor_pales = dict_mostrar['pales']
+
+                    inv_codigo.append(valor_codigo)
+                    inv_piezas.append(valor_piezas)
+                    inv_app_piezas.append(valor_app_piezas)
+                    inv_cajas.append(valor_cajas)
+                    inv_contenido_cajas.append(valor_contenido_cajas)
+                    inv_pales.append(valor_pales)
+                            
+                self.inv_datos = dict(
+                    Inv_Codigo = inv_codigo,
+                    Inv_Piezas = inv_piezas,
+                    Inv_app_piezas = inv_app_piezas,
+                    Inv_Cajas = inv_cajas,
+                    Inv_contenido_cajas = inv_contenido_cajas,
+                    Inv_Pales = inv_pales,
+                )
+
+                self.table.clear()
+                self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
+                for n, key in enumerate(self.inv_datos.keys()):
+                    for m, item in enumerate(self.inv_datos[key]):
+                        self.table.setItem(m,n,QTableWidgetItem(str(item)))
+                self.table.verticalHeader().setDefaultSectionSize(80)
+            
+            
+                    
 
         
 

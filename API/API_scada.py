@@ -44,10 +44,12 @@ async def post_envios(requests: Request):
     valores_mensaje = []
     
     for i in range(0,len(mensaje_separado)):
-        if mensaje_separado[i] != 'p':
-            valores_mensaje.append(int.from_bytes(mensaje_separado[i].encode('ascii'), byteorder='little'))
+        if mensaje_separado[i] == 'p':
+            valores_mensaje.append(0)
+        elif mensaje_separado[i] == 'T':
+            valores_mensaje.append(9)
         else:
-            valores_mensaje.append(0)    
+            valores_mensaje.append(int.from_bytes(mensaje_separado[i].encode('ascii'), byteorder='little'))
     
     valor_app_piezas = str
     valor_app_cajas = str
@@ -73,7 +75,7 @@ async def post_envios(requests: Request):
         valor_app_cajas= 'Tornillos'
     elif valores_mensaje[7] ==4:
         valor_app_cajas= 'Juntas'
-    
+
     if len(mensaje_separado)==22: 
         mensaje_plc = dict(
             plc_run = valores_mensaje[0],
