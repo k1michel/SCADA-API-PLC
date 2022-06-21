@@ -204,9 +204,7 @@ class gui_api_scada(QMainWindow):
             self.primer_ciclo = False
             self.ver_envios = False
             self.ver_maquina = False
-        print(f'Primer ciclo:{self.primer_ciclo}')
-        print(f'Ver envios: {self.ver_envios}')
-        print(f'Ver maquina: {self.ver_maquina}')
+
         ## DATOS ##
         if self.primer_ciclo == True and self.ver_envios==True and self.ver_maquina==True and server==True:
                 dict_all_datos_id_max = {}
@@ -307,7 +305,7 @@ class gui_api_scada(QMainWindow):
                         self.out_media_pales.setText(str(0.00))
                     
                     # Mostrar datos en tabla en tiempo real
-                    print(self.seleccion_tiempo_real.isChecked())
+                    
                     if self.seleccion_tiempo_real.isChecked()==True:
                         inv_codigo =  []
                         inv_piezas = []
@@ -340,7 +338,7 @@ class gui_api_scada(QMainWindow):
                             Inv_contenido_cajas = inv_contenido_cajas,
                             Inv_Pales = inv_pales,
                         )
-                        print(f'Datos para mostrar: {self.inv_datos}')
+                        
                         self.table.clear()
                         self.table.setHorizontalHeaderLabels(['Codigo','Piezas','Funcion','Cajas','Contenido','Pales'])
                         for n, key in enumerate(self.inv_datos.keys()):
