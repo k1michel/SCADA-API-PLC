@@ -2,9 +2,11 @@ import dataset
 
 class Conexion:
     fichero_sqlite: str = 'base_datos.db' 
-    inventario = None
-    envios = None
     
+    envios = None
+    estados = None
+    maquina = None
+    datos = None
 
     def __init__(self):
 

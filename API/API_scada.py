@@ -26,7 +26,7 @@ conexion = Conexion()
 
 ## VARIABLES ##
 mensaje_plc = dict
-codigo_inicial = 56489712
+
 
 ## ENVIOS ##
 @api_scada.get("/envios")

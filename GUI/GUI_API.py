@@ -11,7 +11,7 @@ import subprocess
 from threading import Thread
 import pandas as pd
  
-
+## CLASE PARA ACCION DEL THREAD ##
 class BackendThread(QObject):
     refresh = pyqtSignal(list,bool)
     ip_api= 'http://localhost:8000/'
@@ -49,7 +49,7 @@ class BackendThread(QObject):
                 
    
 
-
+## CLASE PARA CREAR Y EJECUTAR INTERFAZ GRAFICA (GUI)
 class gui_api_scada(QMainWindow):
     ip_api= 'http://localhost:8000/'
     
